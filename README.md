@@ -2,6 +2,54 @@
 
 This project is an existing Laravel 12 application. This patch extends its product data capture, normalized dispatch-location master, and background image processing without replacing the existing marketplace workflows.
 
+## Changelog: 4 Nov 2026 (aaj ka kaam)
+
+**Product type, category aur subcategory**
+- Naya `product_types` table. Har top-level category ek type ke neeche hai (Furniture, Decor, Lighting, Textiles, Outdoor, Kids, Kitchen & Dining).
+- Admin, vendor aur bulk enquiry mein ek hi picker: product type chunne par uski categories, aur category chunne par subcategories, dono multiple selection ke saath.
+- "+ Add" buttons: naya product type, aur naya subcategory (chuni hui category ke neeche). Dono turant dropdown mein aate hain.
+- Product save par chuni hui categories aur subcategories `category_product` mein save hoti hain.
+- Storefront category filter ab multi-category links bhi dekhta hai.
+- Starter subcategories (51) main categories ke neeche add hui hain. Admin mein edit ya delete ho sakti hain.
+
+**Units aur PIN codes**
+- Units database mein hain (`product_units`). Default: Running ft, Running metre, Sq ft, Sq m, Roll, Box, Piece, Set, Pair. "+ Add new unit" se naya unit bana sakte hain.
+- Har unit ke saath length, width, height aur measuring unit (ft, m, cm) ke inputs.
+- Ek product ke liye ek se zyada PIN codes chun sakte hain.
+- Location: sirf country required (India default). State, district, city, PIN optional. Matching sabse narrow level par hota hai.
+
+**Bulk enquiry**
+- Public page `/bulk-enquiry`, header mein link ke saath.
+- Product type, categories, subcategories, WhatsApp number aur other number.
+- Admin menu mein "Bulk enquiries": list, detail, status aur note.
+
+**Reviews aur contact**
+- Koi bhi signed-in customer product page se review de sakta hai. Admin approve karega.
+- "Review us on Google" button (`SHOP_GOOGLE_REVIEW_URL`).
+- Homepage par customer reviews slider (auto-scroll, arrows, mobile/tablet/desktop), customer ki photo ya initial avatar ke saath.
+- Sticky right-side buttons: WhatsApp (animated), Instagram, Facebook, Email, Call us.
+
+**Branding aur design**
+- Brand naam "SpazoraHome". Footer mein "Designed & Developed by Srkwebapp Innovations LLP" link ke saath.
+- Copyright year apne-aap current year dikhata hai.
+- Logo file na mile to default logo dikhta hai. Admin ke primary aur secondary colours poori site par lagte hain.
+- Footer naye layout mein hai (brand aur about, teen link columns, address, bottom bar).
+- Store pages default mein band hain (`SHOP_STORES_ENABLED=false`).
+
+**Registration aur profile**
+- Customer sign-up, customer profile aur vendor (seller) application mein WhatsApp aur other number.
+
+**Category admin**
+- Category list mein Sr. No., Category ID aur image dikhte hain. Add aur edit mein image upload hota hai.
+
+**Backup aur deploy**
+- Poora project + MySQL database ka zip server par: `/home/u966147115/backups/interiorfurniture-backup-2026-11-04-1102am.zip` (`.env` isme nahi hai).
+- Code GitHub par: `testingads6890/spazorahome` (commit `bfd3ebb`).
+
+**Tests:** 554 tests pass.
+
+---
+
 ## Modules changed
 
 - **Location masters:** `countries`, `states`, `districts`, `cities`, and `pincodes`; JSON options endpoint at `/location-options/{level}/{parent?}`; cascading dispatch-location selectors on Admin and Vendor product forms.

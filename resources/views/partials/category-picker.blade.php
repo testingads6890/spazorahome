@@ -2,13 +2,15 @@
      Used by the admin and seller product forms and the bulk enquiry page (with $pickerTypeField / $pickerCategoryField set by the page). --}}
 @php
     $pickerData = \App\Support\CategoryPicker::data();
-    $savedCats = old('category_ids', \App\Support\CategoryPicker::savedIds($product ?? null));
-    $savedSubs = old('subcategory_ids', []);
+    $catName = $pickerCatName ?? 'category_ids';
+    $subName = $pickerSubName ?? 'subcategory_ids';
+    $savedCats = old($catName, \App\Support\CategoryPicker::savedIds($product ?? null));
+    $savedSubs = old($subName, []);
     $savedType = old('product_type_id', $product?->category?->product_type_id ?? null);
     $pickerTypeField = $pickerTypeField ?? 'product_type_id';
 @endphp
 
-<div class="category-picker mb-3" data-category-picker>
+<div class="category-picker mb-3" data-category-picker data-cat-name="{{ $catName }}" data-sub-name="{{ $subName }}">
     <div class="row g-3">
         <div class="col-md-4">
             <label for="cp-type" class="form-label fw-semibold">{{ __('Product type') }} <span class="text-danger">*</span></label>
@@ -53,6 +55,8 @@
         var savedSubs = @json(array_map('intval', (array) $savedSubs));
         var root = document.querySelector('[data-category-picker]');
         if (!root) { return; }
+        var catName = root.getAttribute('data-cat-name') || 'category_ids';
+        var subName = root.getAttribute('data-sub-name') || 'subcategory_ids';
         var typeSel = document.getElementById('cp-type');
         var catBox = document.getElementById('cp-cats');
         var subBox = document.getElementById('cp-subs');
@@ -82,7 +86,7 @@
                 c.subs.forEach(function (s) {
                     if (seen[s.id]) { return; }
                     seen[s.id] = true;
-                    box(subBox, s.id, s.name, 'subcategory_ids[]', keep.indexOf(s.id) !== -1 || savedSubs.indexOf(s.id) !== -1, '');
+                    box(subBox, s.id, s.name, subName + '[]', keep.indexOf(s.id) !== -1 || savedSubs.indexOf(s.id) !== -1, '');
                 });
             });
             // The subcategory section appears as soon as a category is ticked, even when that category has none yet.
@@ -106,7 +110,7 @@
                 catBox.innerHTML = '<span class="text-muted small align-self-center">{{ __('No categories for this type yet. Add one with the + button below.') }}</span>';
             }
             list.forEach(function (c) {
-                var inp = box(catBox, c.id, c.name, 'category_ids[]', keep.indexOf(c.id) !== -1 || savedCats.indexOf(c.id) !== -1, '');
+                var inp = box(catBox, c.id, c.name, catName + '[]', keep.indexOf(c.id) !== -1 || savedCats.indexOf(c.id) !== -1, '');
                 inp.addEventListener('change', renderSubs);
             });
             renderSubs();

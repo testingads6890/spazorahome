@@ -6,7 +6,7 @@
     <meta name="theme-color" content="{{ \App\Support\Theme::secondary() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex, nofollow">
-    <title>@yield('title', __('Sign in')) - Spazora Home</title>
+    <title>@yield('title', __('Sign in')) - SpazoraHome</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
 <body>
 <div class="auth-shell">
     <aside class="auth-side">
-        <a class="brand text-white" href="{{ route('home') }}"><span class="mark" style="background:var(--accent)"><i class="bi bi-house-heart-fill"></i></span><span>InteriorFurniture</span></a>
+        <a class="brand text-white" href="{{ route('home') }}"><img src="{{ \App\Support\Theme::logoUrl() }}" alt="{{ \App\Support\Seo::get('site_title', 'SpazoraHome') }} logo" style="height:56px;width:auto;max-width:200px;object-fit:contain"></a>
         <div class="auth-pitch">
             <h2>@yield('pitch_title', __('Make every room feel like home.'))</h2>
             <p>@yield('pitch_text', __('Sofas, beds, tables and decor from trusted makers, delivered across India with a GST invoice on every order.'))</p>
@@ -36,7 +36,7 @@
 
     <main class="auth-main">
         <div class="auth-card">
-            <a class="brand d-lg-none mb-4" href="{{ route('home') }}"><span class="mark"><i class="bi bi-house-heart-fill"></i></span><span>Interior<span style="color:var(--accent)">Furniture</span></span></a>
+            <a class="brand d-lg-none mb-4" href="{{ route('home') }}"><img src="{{ \App\Support\Theme::logoUrl() }}" alt="{{ \App\Support\Seo::get('site_title', 'SpazoraHome') }} logo" style="height:56px;width:auto;max-width:200px;object-fit:contain"></a>
             @yield('content')
         </div>
     </main>

@@ -76,7 +76,7 @@ class AccountFlowsTest extends TestCase
         // The full seller application: business, address, registration, one required document, bank and terms.
         $this->post(route('vendor.register.post'), [
             'name' => 'Ravi', 'email' => 'ravi@shop.com', 'password' => 'Str0ng!Pass1', 'password_confirmation' => 'Str0ng!Pass1',
-            'company_name' => 'Ravi Woods', 'phone' => '9999999999', 'business_type' => 'manufacturer', 'categories' => [$category->id],
+            'company_name' => 'Ravi Woods', 'phone' => '9999999999', 'business_type' => 'manufacturer', 'product_type_id' => \App\Models\ProductType::firstOrCreate(['slug' => 'furniture'], ['name' => 'Furniture', 'is_active' => true])->id, 'categories' => [$category->id],
             'description' => 'Solid wood furniture made in our Jaipur workshop since 2005.',
             'address' => '5 Market Rd', 'country' => 'India', 'state' => 'Rajasthan', 'city' => 'Jaipur', 'postal_code' => '302001',
             'registration_number' => 'UDYAM-RJ-17-0000001', 'gst_registered' => 0,

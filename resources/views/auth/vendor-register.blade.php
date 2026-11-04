@@ -14,7 +14,6 @@
     $country = old('country', 'India');
     $india = \App\Support\Countries::isIndia($country);
     $gst = (string) old('gst_registered', '1') === '1';
-    $picked = array_map('intval', (array) old('categories', []));
     $accept = '.' . str_replace(',', ',.', \App\Models\VendorDocument::MIMES);
 
     // One text-like field. $opt: type, autocomplete, column class, hint, optional flag, extra attributes.
@@ -111,18 +110,10 @@
                     </select>
                     @error('business_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
-                @include('auth._vendor-field', ['x' => $field('website', __('Website'), ['type' => 'url', 'auto' => 'url', 'optional' => true, 'hint' => __('If you have one. Example: www.yourbrand.com'), 'attrs' => 'inputmode="url" placeholder="https://"'])])
                 <div class="col-12">
-                    <span class="form-label fw-semibold d-block" id="catLabel">{{ __('Product categories you sell') }}</span>
-                    <div class="vform-chips @error('categories') is-invalid @enderror" role="group" aria-labelledby="catLabel">
-                        @foreach($categories as $c)
-                            <input type="checkbox" class="btn-check" name="categories[]" id="cat{{ $c->id }}" value="{{ $c->id }}" {{ in_array($c->id, $picked, true) ? 'checked' : '' }} autocomplete="off">
-                            <label class="vform-chip" for="cat{{ $c->id }}">{{ $c->name }}</label>
-                        @endforeach
-                    </div>
-                    @error('categories')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                    @error('categories.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                    @include('partials.category-picker', ['product' => null, 'pickerTypeField' => 'product_type_id', 'pickerCatName' => 'categories', 'pickerSubName' => 'subcategories'])
                 </div>
+                @include('auth._vendor-field', ['x' => $field('website', __('Website'), ['type' => 'url', 'auto' => 'url', 'optional' => true, 'hint' => __('If you have one. Example: www.yourbrand.com'), 'attrs' => 'inputmode="url" placeholder="https://"'])])
                 <div class="col-12">
                     <label for="description" class="form-label fw-semibold">{{ __('About the business') }}</label>
                     <textarea id="description" name="description" rows="4" maxlength="2000" class="form-control @error('description') is-invalid @enderror" required aria-describedby="descHint">{{ old('description') }}</textarea>
@@ -296,6 +287,8 @@
         form.addEventListener('submit', function (e) {
             var boxes = form.querySelectorAll('[name="categories[]"]'), any = Array.prototype.some.call(boxes, function (b) { return b.checked; });
             if (boxes.length) boxes[0].setCustomValidity(any ? '' : @json(__('Choose at least one product category.')));
+            var typeBox = form.querySelector('[name="product_type_id"]');
+            if (typeBox) { typeBox.setCustomValidity(typeBox.value ? '' : @json(__('Choose a product type.'))); }
             var a = document.getElementById('bank_account'), b = document.getElementById('bank_account_confirmation');
             b.setCustomValidity(a.value.replace(/\s+/g, '') === b.value.replace(/\s+/g, '') ? '' : @json(__('The two account numbers do not match.')));
             if (!form.checkValidity()) {

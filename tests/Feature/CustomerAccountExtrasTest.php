@@ -111,7 +111,7 @@ class CustomerAccountExtrasTest extends TestCase
         $this->actingAs($customer)->get(route('customer.dashboard'))->assertOk()->assertSee(route('customer.become-seller'), false);
         $this->actingAs($customer)->get(route('customer.become-seller'))->assertOk()->assertSee($customer->email)->assertDontSee('name="password"', false);
         $this->actingAs($customer)->post(route('customer.become-seller.store'), [
-            'company_name' => 'Brass House', 'phone' => '9876543210', 'business_type' => 'workshop', 'categories' => [$category->id],
+            'company_name' => 'Brass House', 'phone' => '9876543210', 'business_type' => 'workshop', 'product_type_id' => \App\Models\ProductType::firstOrCreate(['slug' => 'furniture'], ['name' => 'Furniture', 'is_active' => true])->id, 'categories' => [$category->id],
             'description' => 'Hand-made brass lamps and decor from Moradabad artisans.',
             'address' => '2 Brass Lane', 'country' => 'India', 'state' => 'Uttar Pradesh', 'city' => 'Moradabad', 'postal_code' => '244001',
             'registration_number' => 'UDYAM-UP-00-0000002', 'gst_registered' => 0,

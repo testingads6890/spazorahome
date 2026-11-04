@@ -38,7 +38,7 @@ class RegisterController extends Controller
     public function showVendorRegistrationForm()
     {
         return view('auth.vendor-register', [
-            'categories' => Category::where('status', true)->whereNull('parent_id')->orderBy('name')->get(['id', 'name']),
+            'categories' => collect(),
         ]);
     }
 
@@ -95,8 +95,11 @@ class RegisterController extends Controller
             // Optional: a mobile number verified with Firebase OTP. It is attached to the account only if the token checks out.
             'phone_token' => ['nullable', 'string', 'max:4096'],
             'website' => ['nullable', 'url', 'max:255'],
+            'product_type_id' => ['required', 'integer', Rule::exists('product_types', 'id')],
             'categories' => ['required', 'array', 'min:1'],
             'categories.*' => ['integer', Rule::exists('categories', 'id')],
+            'subcategories' => ['nullable', 'array'],
+            'subcategories.*' => ['integer', Rule::exists('categories', 'id')],
             'description' => ['required', 'string', 'min:30', 'max:2000'],
             // Address
             'address' => ['required', 'string', 'max:500'],
@@ -183,7 +186,7 @@ class RegisterController extends Controller
                     'seller_type' => $data['seller_type'],
                     'website' => $data['website'] ?? null,
                     'description' => $data['description'],
-                    'product_categories' => array_map('intval', $data['categories']),
+                    'product_categories' => array_values(array_unique(array_map('intval', array_merge($data['categories'], $data['subcategories'] ?? [])))),
                     'slug' => $this->uniqueVendorSlug($data['company_name']),
                     'email' => $data['email'],
                     'phone' => $data['phone'],
